@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ToDo アプリ</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://unpkg.com/vue@3.0.0/dist/vue.global.js"></script>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="text-center mb-4">ToDoタスクアプリケーション</h1>
+      <p class="text-center mb-5">タスクを入力して「追加」をクリックします。タスクを完了したらチェックボックスをクリックします。</p>
+      <div id="app" class="row justify-content-center">
+        <div class="col-lg-6">
+          <div class="input-group mb-3">
+            <input
+              v-model.trim="todoTitle"
+              type="text"
+              class="form-control"
+              placeholder="タスクを入力してください"
+            />
+            <select class="custom-select" v-model="importance">
+              <option value="高">優先度:高</option>
+              <option value="中">優先度:中</option>
+              <option value="低">優先度:低</option>
+            </select>
+            <div class="input-group-append">
+              <button 
+                class="btn btn-outline-primary"
+                type="submit"
+                :disabled="!canCreateTodo"
+                @click="createTodo"
+              >
+                追加
+              </button>
+            </div>
+          </div>
+          <ul class="list-group">
+            <transition-group name="list" tag="div">
+              <li
+                class="list-group-item d-flex justify-content-between align-items-center"
+                v-for="(todo, index) in todos"
+                :key="todo.id"
+              >
+                <div>
+                  <input class="form-check-input me-1" type="checkbox" v-model="todo.done" @change="removeTodo(index)">
+                  <span v-if="todo.done" class="completed">{{ todo.title }} ({{ todo.importance }}) - {{ todo.time }}</span>
+                  <span v-else>{{ todo.title }} ({{ todo.importance }}) - {{ todo.time }}</span>
+                </div>
+              </li>
+            </transition-group>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <style>
+      .completed {
+        text-decoration: line-through;
+      }
+    </style>
+    <script src="app.js"></script>
+  </body>
+</html>
